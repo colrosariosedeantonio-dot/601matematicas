@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Interactiva - Chaparral e IE Nuestra Señora del Rosario</title>
+    <style>
+        :root {
+            --primary: #15803d;
+            --primary-light: #22c55e;
+            --primary-dark: #166534;
+            --secondary: #0284c7;
+            --accent: #f59e0b;
+            --bg: #f0fdf4;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+            --radius: 16px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            color: #fef08a;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            border: 2px solid #bbf7d0;
+        }
+
+        /* Login Screen */
+        .login-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .login-card h2 {
+            color: var(--primary-dark);
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .select-student,
+        .input-read-only {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 1.05rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            background-color: white;
+        }
+
+        .input-read-only {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* Top Bar Controls */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .student-info-display {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        /* Progress Bar Section */
+        .progress-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 14px;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary));
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        /* Badge Tags */
+        .badge-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-perimetro {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-area {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-volumen {
+            background-color: #fce7f3;
+            color: #be185d;
+        }
+
+        .badge-chaparral {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        /* Problem Section */
+        .problem-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Grid for Drawing and Formula */
+        .visual-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .visual-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .svg-card {
+            background-color: #fafafa;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            min-height: 220px;
+        }
+
+        .svg-container {
+            width: 100%;
+            max-width: 260px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .formula-card {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .formula-card h4 {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .formula-box {
+            background: white;
+            border: 1px solid #93c5fd;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .formula-help {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* Input Controls */
+        .answer-section {
+            background-color: #f1f5f9;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-section label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .input-number {
+            flex: 2;
+            min-width: 140px;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-number:focus {
+            border-color: var(--primary);
+        }
+
+        .select-unit {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.75rem 1rem;
+            font-size: 1.05rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .select-unit:focus {
+            border-color: var(--primary);
+        }
+
+        .feedback-message {
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        .feedback-error {
+            color: var(--error);
+        }
+
+        /* In-page Success Banner */
+        .notebook-banner {
+            background-color: #dcfce7;
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notebook-banner-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .notebook-instructions {
+            color: #164e63;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            background: #ffffff;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Action Buttons */
+        .actions-row {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(21, 128, 61, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-next {
+            background-color: var(--accent);
+            color: #78350f;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background-color: #d97706;
+            color: white;
+        }
+
+        /* Final Screen */
+        .completion-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .completion-card h2 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-card p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .star-rating {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .sending-status {
+            font-weight: bold;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>GEOMETRÍA EN CHAPARRAL - TOLIMA</h1>
+        <p>I.E. Nuestra Señora del Rosario - Grado Sexto (601 AN)</p>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="container">
+
+        <!-- LOGIN VIEW -->
+        <div id="login-view" class="login-card">
+            <h2>Bienvenido a la Actividad Interactiva</h2>
+            <p>Selecciona tu nombre para comenzar o continuar con tu progreso.</p>
+
+            <div class="form-group">
+                <label for="grade-select">Grado:</label>
+                <input type="text" id="grade-select" class="input-read-only" value="601 AN" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="student-select">Estudiante:</label>
+                <select id="student-select" class="select-student">
+                    <option value="">-- Selecciona tu Nombre --</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="startActivity()" style="margin-top: 1rem;">
+                Iniciar Actividad
+            </button>
+        </div>
+
+        <!-- EXERCISE VIEW -->
+        <div id="exercise-view" class="hidden">
+            <!-- Controls Bar -->
+            <div class="controls-bar">
+                <div class="student-info-display" id="student-info-display">Estudiante: </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-secondary" onclick="manualSaveProgress()">Guardar avance</button>
+                    <button class="btn btn-danger" onclick="confirmReset()">Reiniciar</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span id="progress-text">Ejercicio 1 de 15</span>
+                    <span id="score-text">Aciertos: 0</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="badge-container">
+                <span class="badge badge-chaparral">Chaparral</span>
+                <span class="badge" id="badge-category">Categoría</span>
+            </div>
+
+            <!-- Problem Statement -->
+            <h2 class="problem-title" id="problem-title">Cargando problema...</h2>
+            <div class="problem-text" id="problem-text">
+                Cargando el enunciado del ejercicio...
+            </div>
+
+            <!-- Visuals and Formulas -->
+            <div class="visual-grid">
+                <!-- SVG Drawing -->
+                <div class="svg-card">
+                    <div class="svg-container" id="svg-container">
+                        <!-- SVG dynamically injected here -->
+                    </div>
+                </div>
+
+                <!-- Formula Card -->
+                <div class="formula-card">
+                    <h4>
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Fórmula Matemática
+                    </h4>
+                    <div class="formula-box" id="formula-box">Fórmula</div>
+                    <div class="formula-help" id="formula-help">Variables explicativas</div>
+                </div>
+            </div>
+
+            <!-- Input Controls -->
+            <div class="answer-section">
+                <label for="student-answer">Escribe tu respuesta y selecciona la unidad de medida:</label>
+                <div class="input-group">
+                    <input type="number" step="any" id="student-answer" class="input-number" placeholder="Ej: 45.5"
+                        autocomplete="off">
+                    <select id="student-unit" class="select-unit">
+                        <option value="">Unidad...</option>
+                    </select>
+                </div>
+                <div id="feedback-msg" class="feedback-message"></div>
+            </div>
+
+            <!-- Success Banner -->
+            <div id="notebook-banner" class="notebook-banner hidden">
+                <div class="notebook-banner-header">
+                    <span>🎉 ¡Respuesta Correcta!</span>
+                </div>
+                <div class="notebook-instructions">
+                    <strong>Paso obligatorio en el cuaderno:</strong><br>
+                    1. Dibuja la figura geométrica que ves arriba.<br>
+                    2. Escribe la fórmula, la operación matemática con tu procedimiento y el resultado con su unidad.
+                </div>
+                <button id="btn-copied" class="btn btn-primary" onclick="confirmNotebookRegistration()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Ya lo copié en mi cuaderno
+                </button>
+            </div>
+
+            <!-- Action Row -->
+            <div class="actions-row">
+                <button id="btn-verify" class="btn btn-primary" onclick="verifyAnswer()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Verificar Respuesta
+                </button>
+                <button id="btn-next" class="btn btn-secondary btn-next" onclick="goToNextExercise()" disabled>
+                    Siguiente Ejercicio
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- COMPLETION VIEW -->
+        <div id="completion-view" class="completion-card hidden">
+            <div class="star-rating">🎉 🏆 🎉</div>
+            <h2>¡Felicitaciones!</h2>
+            <p>Has completado los 15 ejercicios matemáticos sobre el entorno de Chaparral y la IE Nuestra Señora del
+                Rosario.</p>
+            <p style="font-weight: bold; color: var(--primary-dark); font-size: 1.3rem;" id="final-score">
+                Puntaje Final: 15 / 15
+            </p>
+            <p style="font-weight: bold; color: var(--secondary); font-size: 1.1rem; margin-top: 0.5rem;"
+                id="final-grade">
+                Nota Calificada: 5.0 / 5.0
+            </p>
+
+            <div id="send-status" class="sending-status">Enviando nota a Google Sheets...</div>
+
+            <br>
+            <p style="font-size: 0.95rem;">Asegúrate de tener en tu cuaderno las 15 figuras dibujadas con sus
+                operaciones completas para presentarlas a tu docente.</p>
+            <br>
+            <button class="btn btn-primary" onclick="resetAllData()" style="margin: 0 auto;">
+                Reiniciar Actividad con Nuevo Nombre
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        // --- CONSTANTES DE CONFIGURACIÓN ---
+        // REEMPLAZAR ESTA URL CON TU URL DE DESPLIEGUE DE GOOGLE APPS SCRIPT (Web App URL)
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybRNRET1M9-elBBn1RZDvBwSacnnQhg-7Ws4B0mQRqVDEQA26Ic87yd-ncyyW3tA/exec";
+        const GRADE_NAME = "601 AN";
+
+        const studentList = [
+            "BOCANEGRA FORERO ROBIN ALEJANDRO",
+            "BOCANEGRA VANEGAS ROBEN ESTIVEN",
+            "CARDENAS DEVIA EDWAR ANDRES",
+            "CORRALES MEJIA MARIBEL",
+            "DIAZ ROMERO ZARAY XILENA",
+            "FERNANDEZ GONZALEZ FRANKO DAVID",
+            "FORERO MENDOZA ROLLERTH",
+            "GARZON SANCHEZ HELEN SOFIA",
+            "GARZON SANCHEZ ORIANA THALIA",
+            "GIRALDO LOZANO MAICOL YOHANI",
+            "GUZMAN CHAGUALA ANGIE MILENA",
+            "MASMELA VAQUIRO KAREN NICOL",
+            "OSORIO VALENCIA DIANA SOFIA",
+            "OYOLA BETANCOURTH JESUS MANUEL",
+            "ROJAS TORRES NICOL VALERIA",
+            "SANCHEZ CAPERA JORDAN FELIPE",
+            "SANCHEZ LASSO THOMAS SANTIAGO",
+            "SUAREZ MENDEZ OSCAR JULIAN",
+            "VANEGAS TAPIERO DILAN SANTIAGO"
+        ];
+
+        /* Database of 15 context-based exercises */
+        const baseExercises = [
+            // --- 5 PERÍMETRO (Figuras 2D) ---
+            {
+                id: 1,
+                category: "Perímetro",
+                shape: "Rectángulo",
+                badgeClass: "badge-perimetro",
+                title: "Cerramiento del Huerto Escolar - IE Nuestra Señora del Rosario",
+                problem: "En la IE Nuestra Señora del Rosario van a cercar el terreno rectangular del huerto escolar. El terreno tiene un largo de L = 18 m y un ancho de A = 8 m. ¿Cuál es el perímetro total que se debe cercar con malla?",
+                formula: "P = 2 × L + 2 × A",
+                formulaHelp: "L: Largo (18 m) | A: Ancho (8 m)",
+                calcValue: 52,
+                correctUnit: "m",
+                allowedUnits: ["m", "cm", "km"],
+                svg: `<svg viewBox="0 0 200 120" width="100%" height="100%"><rect x="20" y="20" width="160" height="80" fill="#dcfce7" stroke="#166534" stroke-width="3"/><text x="100" y="15" text-anchor="middle" font-size="12" fill="#166534" font-weight="bold">Largo = 18 m</text><text x="100" y="115" text-anchor="middle" font-size="12" fill="#166534" font-weight="bold">Largo = 18 m</text><text x="10" y="65" text-anchor="middle" font-size="12" fill="#166534" font-weight="bold" transform="rotate(-90, 10, 65)">Ancho = 8 m</text><text x="190" y="65" text-anchor="middle" font-size="12" fill="#166534" font-weight="bold" transform="rotate(90, 190, 65)">Ancho = 8 m</text></svg>`
+            },
+            {
+                id: 2,
+                category: "Perímetro",
+                shape: "Triángulo",
+                badgeClass: "badge-perimetro",
+                title: "Lote Triangulado cerca a la Quebrada La Tuluní",
+                problem: "Un productor de café cerca a la Quebrada La Tuluní posee un lote de forma triangular. Los tres lados del terreno miden a = 45 m, b = 60 m y c = 75 m. ¿Cuál es el perímetro del lote?",
+                formula: "P = a + b + c",
+                formulaHelp: "a, b, c: Longitud de los tres lados",
+                calcValue: 180,
+                correctUnit: "m",
+                allowedUnits: ["m", "cm", "km"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="20,110 180,110 180,20" fill="#fef3c7" stroke="#b45309" stroke-width="3"/><text x="100" y="125" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold">a = 60 m</text><text x="192" y="65" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold">b = 45 m</text><text x="90" y="60" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold" transform="rotate(-30, 90, 60)">c = 75 m</text></svg>`
+            },
+            {
+                id: 3,
+                category: "Perímetro",
+                shape: "Círculo",
+                badgeClass: "badge-perimetro",
+                title: "Borde de la Glorieta en la Entrada a Chaparral",
+                problem: "Se adornará con luces el borde circular de la glorieta vial a la entrada de Chaparral. Si el radio de la glorieta es r = 7 m, ¿cuál es el perímetro (longitud de la circunferencia)? (Usa π ≈ 3.14)",
+                formula: "P = 2 × π × r",
+                formulaHelp: "π ≈ 3.14 | r: Radio (7 m)",
+                calcValue: 43.96,
+                correctUnit: "m",
+                allowedUnits: ["m", "cm", "km"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><circle cx="100" cy="65" r="50" fill="#e0f2fe" stroke="#0369a1" stroke-width="3"/><line x1="100" y1="65" x2="150" y2="65" stroke="#0369a1" stroke-width="2" stroke-dasharray="4"/><circle cx="100" cy="65" r="3" fill="#0369a1"/><text x="125" y="60" text-anchor="middle" font-size="12" fill="#0369a1" font-weight="bold">r = 7 m</text></svg>`
+            },
+            {
+                id: 4,
+                category: "Perímetro",
+                shape: "Trapecio",
+                badgeClass: "badge-perimetro",
+                title: "Placa Polideportiva en el Barrio San Juan de Chaparral",
+                problem: "Una cancha auxiliar en el barrio San Juan tiene forma de trapecio isósceles. Sus lados miden: Base mayor B = 25 m, Base menor b = 15 m y los dos lados inclinados miden c = 10 m cada uno. Calcula su perímetro.",
+                formula: "P = B + b + 2 × c",
+                formulaHelp: "B: Base mayor | b: Base menor | c: Lados laterales",
+                calcValue: 60,
+                correctUnit: "m",
+                allowedUnits: ["m", "cm", "km"],
+                svg: `<svg viewBox="0 0 200 120" width="100%" height="100%"><polygon points="50,25 150,25 180,105 20,105" fill="#f1f5f9" stroke="#334155" stroke-width="3"/><text x="100" y="18" text-anchor="middle" font-size="12" fill="#334155" font-weight="bold">b = 15 m</text><text x="100" y="118" text-anchor="middle" font-size="12" fill="#334155" font-weight="bold">B = 25 m</text><text x="28" y="65" text-anchor="middle" font-size="11" fill="#334155" font-weight="bold">c = 10 m</text><text x="172" y="65" text-anchor="middle" font-size="11" fill="#334155" font-weight="bold">c = 10 m</text></svg>`
+            },
+            {
+                id: 5,
+                category: "Perímetro",
+                shape: "Polígono Regular",
+                badgeClass: "badge-perimetro",
+                title: "Jardines Pentagonales de la IE Nuestra Señora del Rosario",
+                problem: "En el patio de la IE Nuestra Señora del Rosario construyeron una jardinera en forma de pentágono regular (5 lados iguales). Si cada lado mide L = 4.2 m, ¿cuál es el perímetro total de la jardinera?",
+                formula: "P = 5 × L",
+                formulaHelp: "L: Longitud de cada lado (4.2 m)",
+                calcValue: 21,
+                correctUnit: "m",
+                allowedUnits: ["m", "cm", "km"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="100,20 160,60 140,110 60,110 40,60" fill="#fce7f3" stroke="#be185d" stroke-width="3"/><text x="100" y="125" text-anchor="middle" font-size="12" fill="#be185d" font-weight="bold">L = 4.2 m</text></svg>`
+            },
+
+            // --- 5 ÁREA (Figuras 2D) ---
+            {
+                id: 6,
+                category: "Área",
+                shape: "Rectángulo",
+                badgeClass: "badge-area",
+                title: "Secadero de Café en una Finca Chaparraluna",
+                problem: "Un caficultor de la vereda El Limón en Chaparral construye un pasera o secadero rectangular para café. Si tiene una base de b = 12 m y una altura de h = 5 m, ¿cuál es el área disponible para secar los granos?",
+                formula: "A = b × h",
+                formulaHelp: "b: Base (12 m) | h: Altura (5 m)",
+                calcValue: 60,
+                correctUnit: "m²",
+                allowedUnits: ["m²", "cm²", "km²"],
+                svg: `<svg viewBox="0 0 200 120" width="100%" height="100%"><rect x="25" y="25" width="150" height="70" fill="#fef3c7" stroke="#b45309" stroke-width="3"/><text x="100" y="112" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold">Base = 12 m</text><text x="15" y="60" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold" transform="rotate(-90, 15, 60)">Altura = 5 m</text></svg>`
+            },
+            {
+                id: 7,
+                category: "Área",
+                shape: "Triángulo",
+                badgeClass: "badge-area",
+                title: "Zona de Juegos en el Parque Principal de Chaparral",
+                problem: "En el Parque Principal de Chaparral se adecuará una zona verde triangular. La base del triángulo mide b = 14 m y su altura perpendicular mide h = 9 m. Calcula el área total del terreno.",
+                formula: "A = (b × h) / 2",
+                formulaHelp: "b: Base (14 m) | h: Altura (9 m)",
+                calcValue: 63,
+                correctUnit: "m²",
+                allowedUnits: ["m²", "cm²", "km²"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="20,105 180,105 130,25" fill="#dcfce7" stroke="#15803d" stroke-width="3"/><line x1="130" y1="25" x2="130" y2="105" stroke="#15803d" stroke-width="2" stroke-dasharray="4"/><text x="100" y="122" text-anchor="middle" font-size="12" fill="#15803d" font-weight="bold">b = 14 m</text><text x="145" y="65" text-anchor="middle" font-size="12" fill="#15803d" font-weight="bold">h = 9 m</text></svg>`
+            },
+            {
+                id: 8,
+                category: "Área",
+                shape: "Círculo",
+                badgeClass: "badge-area",
+                title: "Tarima Circular del Salón de Eventos IE Nuestra Señora del Rosario",
+                problem: "La IE Nuestra Señora del Rosario quiere pintar el piso de su tarima circular para actos culturales. Si la tarima tiene un radio de r = 4 m, ¿cuál es el área que se debe pintar? (Usa π ≈ 3.14)",
+                formula: "A = π × r²",
+                formulaHelp: "π ≈ 3.14 | r: Radio (4 m)",
+                calcValue: 50.24,
+                correctUnit: "m²",
+                allowedUnits: ["m²", "cm²", "km²"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><circle cx="100" cy="65" r="48" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/><line x1="100" y1="65" x2="148" y2="65" stroke="#0284c7" stroke-width="2" stroke-dasharray="4"/><circle cx="100" cy="65" r="3" fill="#0284c7"/><text x="124" y="58" text-anchor="middle" font-size="12" fill="#0284c7" font-weight="bold">r = 4 m</text></svg>`
+            },
+            {
+                id: 9,
+                category: "Área",
+                shape: "Trapecio",
+                badgeClass: "badge-area",
+                title: "Lote Agrícola a orillas del Río Saldaña",
+                problem: "Un terreno agrícola a orillas del Río Saldaña tiene forma de trapecio. Su base mayor mide B = 30 m, su base menor mide b = 18 m y su altura es h = 12 m. Calcula el área total de cultivo.",
+                formula: "A = ((B + b) × h) / 2",
+                formulaHelp: "B: Base mayor | b: Base menor | h: Altura",
+                calcValue: 288,
+                correctUnit: "m²",
+                allowedUnits: ["m²", "cm²", "km²"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="50,30 140,30 180,105 20,105" fill="#fef3c7" stroke="#d97706" stroke-width="3"/><line x1="50" y1="30" x2="50" y2="105" stroke="#d97706" stroke-width="2" stroke-dasharray="4"/><text x="95" y="22" text-anchor="middle" font-size="12" fill="#d97706" font-weight="bold">b = 18 m</text><text x="100" y="122" text-anchor="middle" font-size="12" fill="#d97706" font-weight="bold">B = 30 m</text><text x="65" y="70" text-anchor="middle" font-size="11" fill="#d97706" font-weight="bold">h = 12 m</text></svg>`
+            },
+            {
+                id: 10,
+                category: "Área",
+                shape: "Rombo",
+                badgeClass: "badge-area",
+                title: "Mural Decorativo en el Barrio Ambeima",
+                problem: "En el barrio Ambeima pintaron un mural romboide. Su diagonal mayor mide D = 12 m y su diagonal menor mide d = 8 m. ¿Cuál es el área total del rombo?",
+                formula: "A = (D × d) / 2",
+                formulaHelp: "D: Diagonal mayor (12 m) | d: Diagonal menor (8 m)",
+                calcValue: 48,
+                correctUnit: "m²",
+                allowedUnits: ["m²", "cm²", "km²"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="100,15 170,65 100,115 30,65" fill="#f3e8ff" stroke="#7e22ce" stroke-width="3"/><line x1="100" y1="15" x2="100" y2="115" stroke="#7e22ce" stroke-width="1.5" stroke-dasharray="4"/><line x1="30" y1="65" x2="170" y2="65" stroke="#7e22ce" stroke-width="1.5" stroke-dasharray="4"/><text x="115" y="45" text-anchor="middle" font-size="10" fill="#7e22ce" font-weight="bold">D = 12 m</text><text x="60" y="58" text-anchor="middle" font-size="10" fill="#7e22ce" font-weight="bold">d = 8 m</text></svg>`
+            },
+
+            // --- 5 VOLUMEN (Cuerpos 3D) ---
+            {
+                id: 11,
+                category: "Volumen",
+                shape: "Cubo",
+                badgeClass: "badge-volumen",
+                title: "Caja de Empaque para Café Especial de Chaparral",
+                problem: "Una marca de café especial en Chaparral empaca sus bultos en cajas cúbicas de cartón rígido. Si cada arista (lado) del cubo mide a = 50 cm, ¿cuál es el volumen total de la caja?",
+                formula: "V = a³ = a × a × a",
+                formulaHelp: "a: Arista del cubo (50 cm)",
+                calcValue: 125000,
+                correctUnit: "cm³",
+                allowedUnits: ["cm³", "m³"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="40,50 90,20 150,20 100,50" fill="#cbd5e1" stroke="#334155" stroke-width="2"/><polygon points="40,50 100,50 100,110 40,110" fill="#94a3b8" stroke="#334155" stroke-width="2"/><polygon points="100,50 150,20 150,80 100,110" fill="#64748b" stroke="#334155" stroke-width="2"/><text x="70" y="125" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">a = 50 cm</text></svg>`
+            },
+            {
+                id: 12,
+                category: "Volumen",
+                shape: "Prisma Rectangular",
+                badgeClass: "badge-volumen",
+                title: "Tanque de Almacenamiento de Agua - IE Nuestra Señora del Rosario",
+                problem: "En la IE Nuestra Señora del Rosario se utiliza un tanque rectangular (prisma) para almacenar agua de reserva. Sus dimensiones son: largo l = 4 m, ancho a = 2.5 m y profundidad (altura) h = 2 m. ¿Cuál es la capacidad en volumen del tanque?",
+                formula: "V = l × a × h",
+                formulaHelp: "l: Largo (4 m) | a: Ancho (2.5 m) | h: Altura (2 m)",
+                calcValue: 20,
+                correctUnit: "m³",
+                allowedUnits: ["m³", "cm³"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="30,45 80,15 170,15 120,45" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/><polygon points="30,45 120,45 120,105 30,105" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/><polygon points="120,45 170,15 170,75 120,105" fill="#0284c7" stroke="#0284c7" stroke-width="2"/><text x="75" y="120" text-anchor="middle" font-size="11" fill="#0369a1" font-weight="bold">l = 4 m</text><text x="155" y="95" text-anchor="middle" font-size="11" fill="#0369a1" font-weight="bold">a = 2.5 m</text><text x="15" y="75" text-anchor="middle" font-size="11" fill="#0369a1" font-weight="bold">h = 2 m</text></svg>`
+            },
+            {
+                id: 13,
+                category: "Volumen",
+                shape: "Cilindro",
+                badgeClass: "badge-volumen",
+                title: "Silo Cilíndrico de Almacenamiento en el Acueducto de Chaparral",
+                problem: "Un tanque cilíndrico de almacenamiento de insumos en el acueducto de Chaparral tiene un radio de base r = 3 m y una altura h = 8 m. Calcula el volumen del cilindro. (Usa π ≈ 3.14)",
+                formula: "V = π × r² × h",
+                formulaHelp: "π ≈ 3.14 | r: Radio (3 m) | h: Altura (8 m)",
+                calcValue: 226.08,
+                correctUnit: "m³",
+                allowedUnits: ["m³", "cm³"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><ellipse cx="100" cy="30" rx="45" ry="15" fill="#cbd5e1" stroke="#475569" stroke-width="2"/><path d="M 55,30 L 55,95 A 45 15 0 0 0 145,95 L 145,30 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/><ellipse cx="100" cy="30" rx="45" ry="15" fill="#cbd5e1" stroke="#475569" stroke-width="2"/><line x1="100" y1="30" x2="145" y2="30" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="3"/><text x="122" y="25" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">r = 3 m</text><text x="165" y="65" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="bold">h = 8 m</text></svg>`
+            },
+            {
+                id: 14,
+                category: "Volumen",
+                shape: "Pirámide",
+                badgeClass: "badge-volumen",
+                title: "Estructura Ornamental en un Parque Temático de Chaparral",
+                problem: "En un parque de Chaparral se construye un monumento decorativo en forma de pirámide de base cuadrada. La base mide L = 6 m por lado y la altura de la pirámide es h = 10 m. ¿Cuál es su volumen?",
+                formula: "V = (L² × h) / 3",
+                formulaHelp: "L: Lado de la base (6 m) | h: Altura (10 m)",
+                calcValue: 120,
+                correctUnit: "m³",
+                allowedUnits: ["m³", "cm³"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="40,100 120,100 160,80 80,80" fill="#fed7aa" stroke="#c2410c" stroke-width="2"/><polygon points="40,100 120,100 100,20" fill="#fb923c" stroke="#c2410c" stroke-width="2"/><polygon points="120,100 160,80 100,20" fill="#f97316" stroke="#c2410c" stroke-width="2"/><line x1="100" y1="20" x2="100" y2="90" stroke="#7c2d12" stroke-width="1.5" stroke-dasharray="3"/><text x="80" y="115" text-anchor="middle" font-size="11" fill="#c2410c" font-weight="bold">L = 6 m</text><text x="115" y="55" text-anchor="middle" font-size="11" fill="#7c2d12" font-weight="bold">h = 10 m</text></svg>`
+            },
+            {
+                id: 15,
+                category: "Volumen",
+                shape: "Prisma Rectangular",
+                badgeClass: "badge-volumen",
+                title: "Cisterna de Filtro de Agua Comunal en Tuluní",
+                problem: "En la comunidad de Tuluní construyeron una cisterna rectangular para filtrar agua de lluvia. El área de la base es A_base = 15 m² y su altura de profundidad es h = 3 m. ¿Cuál es el volumen almacenado?",
+                formula: "V = A_base × h",
+                formulaHelp: "A_base: Área de la base (15 m²) | h: Altura (3 m)",
+                calcValue: 45,
+                correctUnit: "m³",
+                allowedUnits: ["m³", "cm³"],
+                svg: `<svg viewBox="0 0 200 130" width="100%" height="100%"><polygon points="30,40 100,20 170,20 100,40" fill="#a7f3d0" stroke="#047857" stroke-width="2"/><polygon points="30,40 100,40 100,100 30,100" fill="#34d399" stroke="#047857" stroke-width="2"/><polygon points="100,40 170,20 170,80 100,100" fill="#059669" stroke="#047857" stroke-width="2"/><text x="100" y="32" text-anchor="middle" font-size="10" fill="#064e3b" font-weight="bold">A_base = 15 m²</text><text x="15" y="70" text-anchor="middle" font-size="11" fill="#047857" font-weight="bold">h = 3 m</text></svg>`
+            }
+        ];
+
+        /* App State Variables */
+        let exercises = [];
+        let currentIndex = 0;
+        let score = 0;
+        let solvedCurrent = false;
+        let currentStudent = "";
+
+        /* Utility: Shuffle Array (Fisher-Yates) */
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        /* App Initialization */
+        window.onload = function () {
+            populateStudentDropdown();
+            checkSavedProgress();
+        };
+
+        function populateStudentDropdown() {
+            const select = document.getElementById('student-select');
+            studentList.forEach(student => {
+                const opt = document.createElement('option');
+                opt.value = student;
+                opt.innerText = student;
+                select.appendChild(opt);
+            });
+        }
+
+        /* Check LocalStorage for Progress */
+        function checkSavedProgress() {
+            const savedState = localStorage.getItem('geometria_chaparral_state');
+            if (savedState) {
+                try {
+                    const state = JSON.parse(savedState);
+                    currentStudent = state.student;
+                    exercises = state.exercises;
+                    currentIndex = state.currentIndex;
+                    score = state.score;
+                    solvedCurrent = state.solvedCurrent;
+
+                    document.getElementById('login-view').classList.add('hidden');
+                    if (currentIndex >= exercises.length) {
+                        showCompletionScreen();
+                    } else {
+                        document.getElementById('exercise-view').classList.remove('hidden');
+                        document.getElementById('student-info-display').innerText = `Estudiante: ${currentStudent}`;
+                        loadExercise(currentIndex, true);
+                    }
+                } catch (e) {
+                    console.error("Error al cargar estado previo:", e);
+                }
+            }
+        }
+
+        function startActivity() {
+            const select = document.getElementById('student-select');
+            if (!select.value) {
+                alert("Por favor selecciona tu nombre de la lista.");
+                return;
+            }
+
+            currentStudent = select.value;
+            exercises = shuffleArray(baseExercises);
+            currentIndex = 0;
+            score = 0;
+            solvedCurrent = false;
+
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('exercise-view').classList.remove('hidden');
+            document.getElementById('student-info-display').innerText = `Estudiante: ${currentStudent}`;
+
+            saveProgressToLocalStorage();
+            loadExercise(currentIndex);
+        }
+
+        /* LocalStorage Persistence */
+        function saveProgressToLocalStorage() {
+            const state = {
+                student: currentStudent,
+                exercises: exercises,
+                currentIndex: currentIndex,
+                score: score,
+                solvedCurrent: solvedCurrent
+            };
+            localStorage.setItem('geometria_chaparral_state', JSON.stringify(state));
+        }
+
+        function manualSaveProgress() {
+            saveProgressToLocalStorage();
+            alert("✓ Tu avance ha sido guardado exitosamente en este navegador.");
+        }
+
+        function confirmReset() {
+            if (confirm("¿Estás seguro de que deseas reiniciar la actividad? Se borrará el progreso actual de esta sesión.")) {
+                resetAllData();
+            }
+        }
+
+        function resetAllData() {
+            localStorage.removeItem('geometria_chaparral_state');
+            document.getElementById('exercise-view').classList.add('hidden');
+            document.getElementById('completion-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('student-select').value = "";
+        }
+
+        /* Load Exercise Data into View */
+        function loadExercise(index, isRestoring = false) {
+            if (!isRestoring) {
+                solvedCurrent = false;
+            }
+            const ex = exercises[index];
+
+            // Update Progress Bar & Header Text
+            const progressPercent = ((index) / exercises.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('progress-text').innerText = `Ejercicio ${index + 1} de ${exercises.length}`;
+            document.getElementById('score-text').innerText = `Aciertos: ${score}`;
+
+            // Populate Units Select
+            const unitSelect = document.getElementById('student-unit');
+            unitSelect.innerHTML = '<option value="">Unidad...</option>';
+            ex.allowedUnits.forEach(unit => {
+                const opt = document.createElement('option');
+                opt.value = unit;
+                opt.innerText = unit;
+                unitSelect.appendChild(opt);
+            });
+
+            // Reset/Restore Inputs & Banner Controls
+            const answerInput = document.getElementById('student-answer');
+            const feedback = document.getElementById('feedback-msg');
+            const notebookBanner = document.getElementById('notebook-banner');
+            const btnVerify = document.getElementById('btn-verify');
+            const btnNext = document.getElementById('btn-next');
+
+            if (solvedCurrent) {
+                answerInput.value = ex.calcValue;
+                unitSelect.value = ex.correctUnit;
+                answerInput.disabled = true;
+                unitSelect.disabled = true;
+                btnVerify.disabled = true;
+                notebookBanner.classList.remove('hidden');
+                btnNext.disabled = false;
+                btnNext.classList.remove('btn-secondary');
+                btnNext.classList.add('btn-primary');
+                feedback.className = 'feedback-message';
+                feedback.style.color = 'var(--success)';
+                feedback.innerText = '✓ Ejercicio resuelto.';
+            } else {
+                answerInput.value = '';
+                answerInput.disabled = false;
+                unitSelect.disabled = false;
+                feedback.innerText = '';
+                notebookBanner.classList.add('hidden');
+                document.getElementById('btn-copied').disabled = false;
+                btnVerify.disabled = false;
+                btnNext.disabled = true;
+                btnNext.classList.add('btn-secondary');
+                btnNext.classList.remove('btn-primary');
+            }
+
+            // Populate Category & Badges
+            const badgeCategory = document.getElementById('badge-category');
+            badgeCategory.innerText = `${ex.category} (${ex.shape})`;
+            badgeCategory.className = `badge ${ex.badgeClass}`;
+
+            // Populate Titles and Texts
+            document.getElementById('problem-title').innerText = ex.title;
+            document.getElementById('problem-text').innerText = ex.problem;
+            document.getElementById('formula-box').innerText = ex.formula;
+            document.getElementById('formula-help').innerText = ex.formulaHelp;
+
+            // Render SVG
+            document.getElementById('svg-container').innerHTML = ex.svg;
+        }
+
+        /* Verification Logic */
+        function verifyAnswer() {
+            const ex = exercises[currentIndex];
+            const rawAnswer = document.getElementById('student-answer').value;
+            const selectedUnit = document.getElementById('student-unit').value;
+            const feedback = document.getElementById('feedback-msg');
+
+            if (rawAnswer === '' || selectedUnit === '') {
+                feedback.className = 'feedback-message feedback-error';
+                feedback.innerText = 'Por favor, ingresa tanto el valor numérico como la unidad de medida.';
+                return;
+            }
+
+            const numAnswer = parseFloat(rawAnswer);
+            const expectedValue = ex.calcValue;
+
+            const isValueCorrect = Math.abs(numAnswer - expectedValue) < 0.05;
+            const isUnitCorrect = (selectedUnit === ex.correctUnit);
+
+            if (isValueCorrect && isUnitCorrect) {
+                feedback.innerText = '';
+                solvedCurrent = true;
+                score++;
+
+                saveProgressToLocalStorage();
+
+                document.getElementById('student-answer').disabled = true;
+                document.getElementById('student-unit').disabled = true;
+                document.getElementById('btn-verify').disabled = true;
+
+                const banner = document.getElementById('notebook-banner');
+                banner.classList.remove('hidden');
+                banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            } else if (!isValueCorrect && !isUnitCorrect) {
+                feedback.className = 'feedback-message feedback-error';
+                feedback.innerText = 'El valor numérico y la unidad de medida son incorrectos. ¡Revisa la fórmula e inténtalo de nuevo!';
+            } else if (!isValueCorrect) {
+                feedback.className = 'feedback-message feedback-error';
+                feedback.innerText = 'La unidad es correcta, pero el cálculo numérico no coincide. ¡Revisa tus operaciones!';
+            } else {
+                feedback.className = 'feedback-message feedback-error';
+                feedback.innerText = 'El valor numérico es correcto, pero la unidad de medida no es la correspondiente (recuerda: Perímetro en m/cm, Área en m²/cm², Volumen en m³/cm³).';
+            }
+        }
+
+        /* Confirmation from Notebook Button */
+        function confirmNotebookRegistration() {
+            document.getElementById('btn-copied').disabled = true;
+
+            const btnNext = document.getElementById('btn-next');
+            btnNext.disabled = false;
+            btnNext.classList.remove('btn-secondary');
+            btnNext.classList.add('btn-primary');
+
+            const feedback = document.getElementById('feedback-msg');
+            feedback.className = 'feedback-message';
+            feedback.style.color = 'var(--success)';
+            feedback.innerText = '✓ ¡Excelente trabajo registrado! Presiona "Siguiente Ejercicio" para avanzar.';
+        }
+
+        /* Next Exercise / Finish Activity */
+        function goToNextExercise() {
+            if (!solvedCurrent) return;
+
+            currentIndex++;
+            saveProgressToLocalStorage();
+
+            if (currentIndex < exercises.length) {
+                loadExercise(currentIndex);
+            } else {
+                showCompletionScreen();
+            }
+        }
+
+        /* Show Completion Screen & Send Grade to Apps Script */
+        function showCompletionScreen() {
+            document.getElementById('progress-bar').style.width = '100%';
+            document.getElementById('exercise-view').classList.add('hidden');
+            document.getElementById('completion-view').classList.remove('hidden');
+
+            // Calculate final scale 1.0 to 5.0
+            const calculatedGrade = ((score / exercises.length) * 5.0).toFixed(1);
+
+            document.getElementById('final-score').innerText = `Puntaje Final: ${score} / ${exercises.length}`;
+            document.getElementById('final-grade').innerText = `Nota Calificada: ${calculatedGrade} / 5.0`;
+
+            sendDataToGoogleSheets(currentStudent, GRADE_NAME, calculatedGrade);
+        }
+
+        /* Google Apps Script Integration */
+        function sendDataToGoogleSheets(studentName, grade, finalNota) {
+            const statusDiv = document.getElementById('send-status');
+            if (APP_SCRIPT_URL.includes('REEMPLAZA_ESTO')) {
+                statusDiv.style.backgroundColor = '#fee2e2';
+                statusDiv.style.color = '#b91c1c';
+                statusDiv.innerText = '⚠ Falta configurar la URL de implementación de Google Apps Script.';
+                return;
+            }
+
+            statusDiv.style.backgroundColor = '#e0f2fe';
+            statusDiv.style.color = '#0369a1';
+            statusDiv.innerText = 'Registrando nota en la planilla docente...';
+
+            const payload = {
+                nombre: studentName,
+                grado: grade,
+                nota: parseFloat(finalNota)
+            };
+
+            fetch(APP_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Evita restricciones CORS desde GitHub Pages
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(() => {
+                    statusDiv.style.backgroundColor = '#fef3c7';
+                    statusDiv.style.color = '#92400e';
+                    statusDiv.innerText = 'Solicitud enviada. Verifica en la planilla que la nota aparezca registrada.';
+                })
+                .catch(error => {
+                    console.error("Error al enviar la nota:", error);
+                    statusDiv.style.backgroundColor = '#fee2e2';
+                    statusDiv.style.color = '#b91c1c';
+                    statusDiv.innerText = '⚠ No se pudo enviar automáticamente la nota. Toma una captura de pantalla y preséntala a tu profesor.';
+                });
+        }
+    </script>
+</body>
+
+</html>
